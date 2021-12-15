@@ -74,7 +74,9 @@ Write-Output "Copy hddcoin executables to hddcoin-light-gui\"
 Write-Output "   ---"
 Copy-Item "dist\daemon" -Destination "..\hddcoin-light-gui\packages\wallet" -Recurse
 Set-Location -Path "..\hddcoin-light-gui" -PassThru
-Copy-Item "win_code_sign_cert.p12" -Destination "packages\wallet\"
+If ($env:HAS_SECRET) {
+    Copy-Item "win_code_sign_cert.p12" -Destination "packages\wallet\"
+}
 
 git status
 
