@@ -5,31 +5,31 @@ from typing import Optional, Tuple
 
 from blspy import AugSchemeMPL
 
-from chia.consensus.block_record import BlockRecord
-from chia.consensus.blockchain_interface import BlockchainInterface
-from chia.consensus.constants import ConsensusConstants
-from chia.consensus.deficit import calculate_deficit
-from chia.consensus.difficulty_adjustment import can_finish_sub_and_full_epoch
-from chia.consensus.get_block_challenge import final_eos_is_already_included, get_block_challenge
-from chia.consensus.make_sub_epoch_summary import make_sub_epoch_summary
-from chia.consensus.pot_iterations import (
+from hddcoin.consensus.block_record import BlockRecord
+from hddcoin.consensus.blockchain_interface import BlockchainInterface
+from hddcoin.consensus.constants import ConsensusConstants
+from hddcoin.consensus.deficit import calculate_deficit
+from hddcoin.consensus.difficulty_adjustment import can_finish_sub_and_full_epoch
+from hddcoin.consensus.get_block_challenge import final_eos_is_already_included, get_block_challenge
+from hddcoin.consensus.make_sub_epoch_summary import make_sub_epoch_summary
+from hddcoin.consensus.pot_iterations import (
     calculate_ip_iters,
     calculate_iterations_quality,
     calculate_sp_interval_iters,
     calculate_sp_iters,
     is_overflow_block,
 )
-from chia.consensus.vdf_info_computation import get_signage_point_vdf_info
-from chia.types.blockchain_format.classgroup import ClassgroupElement
-from chia.types.blockchain_format.sized_bytes import bytes32
-from chia.types.blockchain_format.slots import ChallengeChainSubSlot, RewardChainSubSlot, SubSlotProofs
-from chia.types.blockchain_format.vdf import VDFInfo, VDFProof
-from chia.types.end_of_slot_bundle import EndOfSubSlotBundle
-from chia.types.header_block import HeaderBlock
-from chia.types.unfinished_header_block import UnfinishedHeaderBlock
-from chia.util.errors import Err, ValidationError
-from chia.util.hash import std_hash
-from chia.util.ints import uint8, uint32, uint64, uint128
+from hddcoin.consensus.vdf_info_computation import get_signage_point_vdf_info
+from hddcoin.types.blockchain_format.classgroup import ClassgroupElement
+from hddcoin.types.blockchain_format.sized_bytes import bytes32
+from hddcoin.types.blockchain_format.slots import ChallengeChainSubSlot, RewardChainSubSlot, SubSlotProofs
+from hddcoin.types.blockchain_format.vdf import VDFInfo, VDFProof
+from hddcoin.types.end_of_slot_bundle import EndOfSubSlotBundle
+from hddcoin.types.header_block import HeaderBlock
+from hddcoin.types.unfinished_header_block import UnfinishedHeaderBlock
+from hddcoin.util.errors import Err, ValidationError
+from hddcoin.util.hash import std_hash
+from hddcoin.util.ints import uint8, uint32, uint64, uint128
 
 log = logging.getLogger(__name__)
 

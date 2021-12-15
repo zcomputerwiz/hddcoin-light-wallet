@@ -1,5 +1,5 @@
 from pathlib import Path
-from chia.util.db_wrapper import DBWrapper
+from hddcoin.util.db_wrapper import DBWrapper
 import tempfile
 import aiosqlite
 

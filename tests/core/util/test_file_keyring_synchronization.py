@@ -3,9 +3,9 @@ import logging
 import os
 import pytest
 
-from chia.util.file_keyring import acquire_writer_lock, FileKeyring, FileKeyringLockTimeout
-from chia.util.keyring_wrapper import KeyringWrapper
-from chia.util.path import mkdir
+from hddcoin.util.file_keyring import acquire_writer_lock, FileKeyring, FileKeyringLockTimeout
+from hddcoin.util.keyring_wrapper import KeyringWrapper
+from hddcoin.util.path import mkdir
 from multiprocessing import Pool, TimeoutError
 from pathlib import Path
 from sys import platform

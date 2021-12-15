@@ -2,17 +2,17 @@ from typing import Any, Dict, List, Optional
 
 import aiohttp
 
-from chia.cmds.units import units
-from chia.consensus.block_record import BlockRecord
-from chia.rpc.farmer_rpc_client import FarmerRpcClient
-from chia.rpc.full_node_rpc_client import FullNodeRpcClient
-from chia.rpc.wallet_rpc_client import WalletRpcClient
-from chia.util.config import load_config
-from chia.util.default_root import DEFAULT_ROOT_PATH
-from chia.util.ints import uint16
-from chia.util.misc import format_bytes
-from chia.util.misc import format_minutes
-from chia.util.network import is_localhost
+from hddcoin.cmds.units import units
+from hddcoin.consensus.block_record import BlockRecord
+from hddcoin.rpc.farmer_rpc_client import FarmerRpcClient
+from hddcoin.rpc.full_node_rpc_client import FullNodeRpcClient
+from hddcoin.rpc.wallet_rpc_client import WalletRpcClient
+from hddcoin.util.config import load_config
+from hddcoin.util.default_root import DEFAULT_ROOT_PATH
+from hddcoin.util.ints import uint16
+from hddcoin.util.misc import format_bytes
+from hddcoin.util.misc import format_minutes
+from hddcoin.util.network import is_localhost
 
 SECONDS_PER_BLOCK = (24 * 3600) / 4608
 
@@ -212,9 +212,9 @@ async def summary(
         print("Farming")
 
     if amounts is not None:
-        print(f"Total chia farmed: {amounts['farmed_amount'] / units['chia']}")
-        print(f"User transaction fees: {amounts['fee_amount'] / units['chia']}")
-        print(f"Block rewards: {(amounts['farmer_reward_amount'] + amounts['pool_reward_amount']) / units['chia']}")
+        print(f"Total hddcoin farmed: {amounts['farmed_amount'] / units['hddcoin']}")
+        print(f"User transaction fees: {amounts['fee_amount'] / units['hddcoin']}")
+        print(f"Block rewards: {(amounts['farmer_reward_amount'] + amounts['pool_reward_amount']) / units['hddcoin']}")
         print(f"Last height farmed: {amounts['last_height_farmed']}")
 
     class PlotStats:
@@ -273,8 +273,8 @@ async def summary(
 
     if amounts is None:
         if wallet_not_running:
-            print("For details on farmed rewards and fees you should run 'chia start wallet' and 'chia wallet show'")
+            print("For details on farmed rewards and fees you should run 'hddcoin start wallet' and 'hddcoin wallet show'")
         elif wallet_not_ready:
-            print("For details on farmed rewards and fees you should run 'chia wallet show'")
+            print("For details on farmed rewards and fees you should run 'hddcoin wallet show'")
     else:
-        print("Note: log into your key using 'chia wallet show' to see rewards for each key")
+        print("Note: log into your key using 'hddcoin wallet show' to see rewards for each key")

@@ -8,30 +8,30 @@ from typing import Dict, List, Optional, Set, Tuple
 from blspy import G1Element
 from chiabip158 import PyBIP158
 
-from chia.util import cached_bls
-from chia.consensus.block_record import BlockRecord
-from chia.consensus.constants import ConsensusConstants
-from chia.consensus.cost_calculator import NPCResult, calculate_cost_of_program
-from chia.full_node.bundle_tools import simple_solution_generator
-from chia.full_node.coin_store import CoinStore
-from chia.full_node.mempool import Mempool
-from chia.full_node.mempool_check_conditions import mempool_check_conditions_dict, get_name_puzzle_conditions
-from chia.full_node.pending_tx_cache import PendingTxCache
-from chia.types.blockchain_format.coin import Coin
-from chia.types.blockchain_format.program import SerializedProgram
-from chia.types.blockchain_format.sized_bytes import bytes32
-from chia.types.coin_record import CoinRecord
-from chia.types.condition_opcodes import ConditionOpcode
-from chia.types.condition_with_args import ConditionWithArgs
-from chia.types.mempool_inclusion_status import MempoolInclusionStatus
-from chia.types.mempool_item import MempoolItem
-from chia.types.spend_bundle import SpendBundle
-from chia.util.clvm import int_from_bytes
-from chia.util.condition_tools import pkm_pairs
-from chia.util.errors import Err
-from chia.util.generator_tools import additions_for_npc
-from chia.util.ints import uint32, uint64
-from chia.util.streamable import recurse_jsonify
+from hddcoin.util import cached_bls
+from hddcoin.consensus.block_record import BlockRecord
+from hddcoin.consensus.constants import ConsensusConstants
+from hddcoin.consensus.cost_calculator import NPCResult, calculate_cost_of_program
+from hddcoin.full_node.bundle_tools import simple_solution_generator
+from hddcoin.full_node.coin_store import CoinStore
+from hddcoin.full_node.mempool import Mempool
+from hddcoin.full_node.mempool_check_conditions import mempool_check_conditions_dict, get_name_puzzle_conditions
+from hddcoin.full_node.pending_tx_cache import PendingTxCache
+from hddcoin.types.blockchain_format.coin import Coin
+from hddcoin.types.blockchain_format.program import SerializedProgram
+from hddcoin.types.blockchain_format.sized_bytes import bytes32
+from hddcoin.types.coin_record import CoinRecord
+from hddcoin.types.condition_opcodes import ConditionOpcode
+from hddcoin.types.condition_with_args import ConditionWithArgs
+from hddcoin.types.mempool_inclusion_status import MempoolInclusionStatus
+from hddcoin.types.mempool_item import MempoolItem
+from hddcoin.types.spend_bundle import SpendBundle
+from hddcoin.util.clvm import int_from_bytes
+from hddcoin.util.condition_tools import pkm_pairs
+from hddcoin.util.errors import Err
+from hddcoin.util.generator_tools import additions_for_npc
+from hddcoin.util.ints import uint32, uint64
+from hddcoin.util.streamable import recurse_jsonify
 
 log = logging.getLogger(__name__)
 
@@ -53,7 +53,7 @@ class MempoolManager:
         self.coin_store = coin_store
 
         # The fee per cost must be above this amount to consider the fee "nonzero", and thus able to kick out other
-        # transactions. This prevents spam. This is equivalent to 0.055 XCH per block, or about 0.00005 XCH for two
+        # transactions. This prevents spam. This is equivalent to 0.055 HDD per block, or about 0.00005 HDD for two
         # spends.
         self.nonzero_fee_minimum_fpc = 5
 
@@ -158,7 +158,7 @@ class MempoolManager:
 
     @staticmethod
     def get_min_fee_increase() -> int:
-        # 0.00001 XCH
+        # 0.00001 HDD
         return 10000000
 
     def can_replace(
@@ -387,14 +387,14 @@ class MempoolManager:
                 log.warning(f"{npc.puzzle_hash} != {coin_record.coin.puzzle_hash}")
                 return None, MempoolInclusionStatus.FAILED, Err.WRONG_PUZZLE_HASH
 
-            chialisp_height = (
+            hddcoinlisp_height = (
                 self.peak.prev_transaction_block_height if not self.peak.is_transaction_block else self.peak.height
             )
             assert self.peak.timestamp is not None
             error = mempool_check_conditions_dict(
                 coin_record,
                 npc.condition_dict,
-                uint32(chialisp_height),
+                uint32(hddcoinlisp_height),
                 self.peak.timestamp,
             )
 

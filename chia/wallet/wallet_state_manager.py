@@ -11,50 +11,50 @@ import aiosqlite
 from blspy import G1Element, PrivateKey
 from chiabip158 import PyBIP158
 
-from chia.consensus.coinbase import pool_parent_id, farmer_parent_id
-from chia.consensus.constants import ConsensusConstants
-from chia.protocols import wallet_protocol
-from chia.protocols.wallet_protocol import PuzzleSolutionResponse, RespondPuzzleSolution, CoinState
-from chia.types.blockchain_format.coin import Coin
-from chia.types.blockchain_format.program import Program
-from chia.types.blockchain_format.sized_bytes import bytes32
-from chia.types.coin_spend import CoinSpend
-from chia.types.full_block import FullBlock
-from chia.types.header_block import HeaderBlock
-from chia.types.mempool_inclusion_status import MempoolInclusionStatus
-from chia.types.weight_proof import WeightProof
-from chia.util.byte_types import hexstr_to_bytes
-from chia.util.db_wrapper import DBWrapper
-from chia.util.errors import Err
-from chia.util.ints import uint32, uint64, uint128
-from chia.util.db_synchronous import db_synchronous_on
-from chia.wallet.cc_wallet.cc_utils import match_cat_puzzle, construct_cc_puzzle
-from chia.wallet.cc_wallet.cc_wallet import CCWallet
-from chia.wallet.derivation_record import DerivationRecord
-from chia.wallet.derive_keys import master_sk_to_wallet_sk, master_sk_to_wallet_sk_unhardened
-from chia.wallet.key_val_store import KeyValStore
-from chia.wallet.puzzles.cc_loader import CC_MOD
-from chia.wallet.rl_wallet.rl_wallet import RLWallet
-from chia.wallet.settings.user_settings import UserSettings
-from chia.wallet.trade_manager import TradeManager
-from chia.wallet.transaction_record import TransactionRecord
-from chia.wallet.util.transaction_type import TransactionType
-from chia.wallet.util.wallet_types import WalletType
-from chia.wallet.wallet import Wallet
-from chia.wallet.wallet_action import WalletAction
-from chia.wallet.wallet_action_store import WalletActionStore
-from chia.wallet.wallet_blockchain import WalletBlockchain
-from chia.wallet.wallet_coin_record import WalletCoinRecord
-from chia.wallet.wallet_coin_store import WalletCoinStore
-from chia.wallet.wallet_info import WalletInfo
-from chia.wallet.wallet_interested_store import WalletInterestedStore
-from chia.wallet.wallet_puzzle_store import WalletPuzzleStore
-from chia.wallet.wallet_sync_store import WalletSyncStore
-from chia.wallet.wallet_transaction_store import WalletTransactionStore
-from chia.wallet.wallet_user_store import WalletUserStore
-from chia.server.server import ChiaServer
-from chia.wallet.did_wallet.did_wallet import DIDWallet
-from chia.wallet.wallet_weight_proof_handler import WalletWeightProofHandler
+from hddcoin.consensus.coinbase import pool_parent_id, farmer_parent_id
+from hddcoin.consensus.constants import ConsensusConstants
+from hddcoin.protocols import wallet_protocol
+from hddcoin.protocols.wallet_protocol import PuzzleSolutionResponse, RespondPuzzleSolution, CoinState
+from hddcoin.types.blockchain_format.coin import Coin
+from hddcoin.types.blockchain_format.program import Program
+from hddcoin.types.blockchain_format.sized_bytes import bytes32
+from hddcoin.types.coin_spend import CoinSpend
+from hddcoin.types.full_block import FullBlock
+from hddcoin.types.header_block import HeaderBlock
+from hddcoin.types.mempool_inclusion_status import MempoolInclusionStatus
+from hddcoin.types.weight_proof import WeightProof
+from hddcoin.util.byte_types import hexstr_to_bytes
+from hddcoin.util.db_wrapper import DBWrapper
+from hddcoin.util.errors import Err
+from hddcoin.util.ints import uint32, uint64, uint128
+from hddcoin.util.db_synchronous import db_synchronous_on
+from hddcoin.wallet.cc_wallet.cc_utils import match_cat_puzzle, construct_cc_puzzle
+from hddcoin.wallet.cc_wallet.cc_wallet import CCWallet
+from hddcoin.wallet.derivation_record import DerivationRecord
+from hddcoin.wallet.derive_keys import master_sk_to_wallet_sk, master_sk_to_wallet_sk_unhardened
+from hddcoin.wallet.key_val_store import KeyValStore
+from hddcoin.wallet.puzzles.cc_loader import CC_MOD
+from hddcoin.wallet.rl_wallet.rl_wallet import RLWallet
+from hddcoin.wallet.settings.user_settings import UserSettings
+from hddcoin.wallet.trade_manager import TradeManager
+from hddcoin.wallet.transaction_record import TransactionRecord
+from hddcoin.wallet.util.transaction_type import TransactionType
+from hddcoin.wallet.util.wallet_types import WalletType
+from hddcoin.wallet.wallet import Wallet
+from hddcoin.wallet.wallet_action import WalletAction
+from hddcoin.wallet.wallet_action_store import WalletActionStore
+from hddcoin.wallet.wallet_blockchain import WalletBlockchain
+from hddcoin.wallet.wallet_coin_record import WalletCoinRecord
+from hddcoin.wallet.wallet_coin_store import WalletCoinStore
+from hddcoin.wallet.wallet_info import WalletInfo
+from hddcoin.wallet.wallet_interested_store import WalletInterestedStore
+from hddcoin.wallet.wallet_puzzle_store import WalletPuzzleStore
+from hddcoin.wallet.wallet_sync_store import WalletSyncStore
+from hddcoin.wallet.wallet_transaction_store import WalletTransactionStore
+from hddcoin.wallet.wallet_user_store import WalletUserStore
+from hddcoin.server.server import HDDcoinServer
+from hddcoin.wallet.did_wallet.did_wallet import DIDWallet
+from hddcoin.wallet.wallet_weight_proof_handler import WalletWeightProofHandler
 
 
 def get_balance_from_coin_records(coin_records: Set[WalletCoinRecord]) -> uint128:
@@ -109,7 +109,7 @@ class WalletStateManager:
     sync_store: WalletSyncStore
     interested_store: WalletInterestedStore
     weight_proof_handler: WalletWeightProofHandler
-    server: ChiaServer
+    server: HDDcoinServer
     root_path: Path
     wallet_node: Any
 
@@ -119,7 +119,7 @@ class WalletStateManager:
         config: Dict,
         db_path: Path,
         constants: ConsensusConstants,
-        server: ChiaServer,
+        server: HDDcoinServer,
         root_path: Path,
         subscribe_to_new_puzzle_hash,
         get_coin_state,

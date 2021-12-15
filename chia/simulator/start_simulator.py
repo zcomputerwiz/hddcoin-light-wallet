@@ -3,13 +3,13 @@ from pathlib import Path
 from multiprocessing import freeze_support
 from typing import Dict
 
-from chia.full_node.full_node import FullNode
-from chia.rpc.full_node_rpc_api import FullNodeRpcApi
-from chia.server.outbound_message import NodeType
-from chia.server.start_service import run_service
-from chia.util.config import load_config_cli
-from chia.util.default_root import DEFAULT_ROOT_PATH
-from chia.util.path import mkdir, path_from_root
+from hddcoin.full_node.full_node import FullNode
+from hddcoin.rpc.full_node_rpc_api import FullNodeRpcApi
+from hddcoin.server.outbound_message import NodeType
+from hddcoin.server.start_service import run_service
+from hddcoin.util.config import load_config_cli
+from hddcoin.util.default_root import DEFAULT_ROOT_PATH
+from hddcoin.util.path import mkdir, path_from_root
 from tests.block_tools import BlockTools, create_block_tools, test_constants
 from tests.util.keyring import TempKeyring
 

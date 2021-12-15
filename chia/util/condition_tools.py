@@ -2,16 +2,16 @@ from typing import Dict, List, Optional, Tuple, Set
 
 from blspy import G1Element
 
-from chia.types.announcement import Announcement
-from chia.types.name_puzzle_condition import NPC
-from chia.types.blockchain_format.coin import Coin
-from chia.types.blockchain_format.program import Program, SerializedProgram
-from chia.types.blockchain_format.sized_bytes import bytes32
-from chia.types.condition_opcodes import ConditionOpcode
-from chia.types.condition_with_args import ConditionWithArgs
-from chia.util.clvm import int_from_bytes
-from chia.util.errors import ConsensusError, Err
-from chia.util.ints import uint64
+from hddcoin.types.announcement import Announcement
+from hddcoin.types.name_puzzle_condition import NPC
+from hddcoin.types.blockchain_format.coin import Coin
+from hddcoin.types.blockchain_format.program import Program, SerializedProgram
+from hddcoin.types.blockchain_format.sized_bytes import bytes32
+from hddcoin.types.condition_opcodes import ConditionOpcode
+from hddcoin.types.condition_with_args import ConditionWithArgs
+from hddcoin.util.clvm import int_from_bytes
+from hddcoin.util.errors import ConsensusError, Err
+from hddcoin.util.ints import uint64
 
 # TODO: review each `assert` and consider replacing with explicit checks
 #       since asserts can be stripped with python `-OO` flag
@@ -21,7 +21,7 @@ def parse_sexp_to_condition(
     sexp: Program,
 ) -> Tuple[Optional[Err], Optional[ConditionWithArgs]]:
     """
-    Takes a ChiaLisp sexp and returns a ConditionWithArgs.
+    Takes a HDDcoinLisp sexp and returns a ConditionWithArgs.
     If it fails, returns an Error
     """
     as_atoms = sexp.as_atom_list()
@@ -36,7 +36,7 @@ def parse_sexp_to_conditions(
     sexp: Program,
 ) -> Tuple[Optional[Err], Optional[List[ConditionWithArgs]]]:
     """
-    Takes a ChiaLisp sexp (list) and returns the list of ConditionWithArgss
+    Takes a HDDcoinLisp sexp (list) and returns the list of ConditionWithArgss
     If it fails, returns as Error
     """
     results: List[ConditionWithArgs] = []

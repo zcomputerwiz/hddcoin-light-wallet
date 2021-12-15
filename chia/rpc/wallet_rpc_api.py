@@ -5,35 +5,35 @@ from typing import Callable, Dict, List, Optional, Tuple, Any
 
 from blspy import PrivateKey, G1Element
 
-from chia.consensus.block_rewards import calculate_base_farmer_reward
-from chia.pools.pool_wallet import PoolWallet
-from chia.pools.pool_wallet_info import create_pool_state, FARMING_TO_POOL, PoolWalletInfo, PoolState
-from chia.protocols.protocol_message_types import ProtocolMessageTypes
-from chia.server.outbound_message import NodeType, make_msg
-from chia.simulator.simulator_protocol import FarmNewBlockProtocol
-from chia.types.blockchain_format.coin import Coin
-from chia.types.blockchain_format.sized_bytes import bytes32
-from chia.util.bech32m import decode_puzzle_hash, encode_puzzle_hash
-from chia.util.byte_types import hexstr_to_bytes
-from chia.util.ints import uint32, uint64
-from chia.util.keychain import KeyringIsLocked, bytes_to_mnemonic, generate_mnemonic
-from chia.util.path import path_from_root
-from chia.util.ws_message import WsRpcMessage, create_payload_dict
-from chia.wallet.cc_wallet.cat_constants import DEFAULT_CATS
-from chia.wallet.cc_wallet.cc_wallet import CCWallet
-from chia.wallet.derive_keys import master_sk_to_singleton_owner_sk, master_sk_to_wallet_sk_unhardened
-from chia.wallet.rl_wallet.rl_wallet import RLWallet
-from chia.wallet.derive_keys import master_sk_to_farmer_sk, master_sk_to_pool_sk, master_sk_to_wallet_sk
-from chia.wallet.did_wallet.did_wallet import DIDWallet
-from chia.wallet.trade_record import TradeRecord
-from chia.wallet.transaction_record import TransactionRecord
-from chia.wallet.util.trade_utils import trade_record_to_dict
-from chia.wallet.util.transaction_type import TransactionType
-from chia.wallet.util.wallet_types import WalletType
-from chia.wallet.wallet_info import WalletInfo
-from chia.wallet.wallet_node import WalletNode
-from chia.util.config import load_config
-from chia.consensus.coinbase import create_puzzlehash_for_pk
+from hddcoin.consensus.block_rewards import calculate_base_farmer_reward
+from hddcoin.pools.pool_wallet import PoolWallet
+from hddcoin.pools.pool_wallet_info import create_pool_state, FARMING_TO_POOL, PoolWalletInfo, PoolState
+from hddcoin.protocols.protocol_message_types import ProtocolMessageTypes
+from hddcoin.server.outbound_message import NodeType, make_msg
+from hddcoin.simulator.simulator_protocol import FarmNewBlockProtocol
+from hddcoin.types.blockchain_format.coin import Coin
+from hddcoin.types.blockchain_format.sized_bytes import bytes32
+from hddcoin.util.bech32m import decode_puzzle_hash, encode_puzzle_hash
+from hddcoin.util.byte_types import hexstr_to_bytes
+from hddcoin.util.ints import uint32, uint64
+from hddcoin.util.keychain import KeyringIsLocked, bytes_to_mnemonic, generate_mnemonic
+from hddcoin.util.path import path_from_root
+from hddcoin.util.ws_message import WsRpcMessage, create_payload_dict
+from hddcoin.wallet.cc_wallet.cat_constants import DEFAULT_CATS
+from hddcoin.wallet.cc_wallet.cc_wallet import CCWallet
+from hddcoin.wallet.derive_keys import master_sk_to_singleton_owner_sk, master_sk_to_wallet_sk_unhardened
+from hddcoin.wallet.rl_wallet.rl_wallet import RLWallet
+from hddcoin.wallet.derive_keys import master_sk_to_farmer_sk, master_sk_to_pool_sk, master_sk_to_wallet_sk
+from hddcoin.wallet.did_wallet.did_wallet import DIDWallet
+from hddcoin.wallet.trade_record import TradeRecord
+from hddcoin.wallet.transaction_record import TransactionRecord
+from hddcoin.wallet.util.trade_utils import trade_record_to_dict
+from hddcoin.wallet.util.transaction_type import TransactionType
+from hddcoin.wallet.util.wallet_types import WalletType
+from hddcoin.wallet.wallet_info import WalletInfo
+from hddcoin.wallet.wallet_node import WalletNode
+from hddcoin.util.config import load_config
+from hddcoin.consensus.coinbase import create_puzzlehash_for_pk
 
 # Timeout for response from wallet/full node for sending a transaction
 TIMEOUT = 30
@@ -45,7 +45,7 @@ class WalletRpcApi:
     def __init__(self, wallet_node: WalletNode):
         assert wallet_node is not None
         self.service = wallet_node
-        self.service_name = "chia_wallet"
+        self.service_name = "hddcoin_wallet"
         self.balance_cache: Dict[int, Any] = {}
 
     def get_routes(self) -> Dict[str, Callable]:
@@ -128,7 +128,7 @@ class WalletRpcApi:
             data["wallet_id"] = args[1]
         if args[2] is not None:
             data["additional_data"] = args[2]
-        return [create_payload_dict("state_changed", data, "chia_wallet", "wallet_ui")]
+        return [create_payload_dict("state_changed", data, "hddcoin_wallet", "wallet_ui")]
 
     async def _stop_wallet(self):
         """
@@ -266,8 +266,8 @@ class WalletRpcApi:
             return False, False
 
         config: Dict = load_config(new_root, "config.yaml")
-        farmer_target = config["farmer"].get("xch_target_address")
-        pool_target = config["pool"].get("xch_target_address")
+        farmer_target = config["farmer"].get("hdd_target_address")
+        pool_target = config["pool"].get("hdd_target_address")
         found_farmer = False
         found_pool = False
         selected = config["selected_network"]
@@ -504,7 +504,7 @@ class WalletRpcApi:
             if request["mode"] == "new":
                 owner_puzzle_hash: bytes32 = await self.service.wallet_state_manager.main_wallet.get_puzzle_hash(True)
 
-                from chia.pools.pool_wallet_info import initial_pool_state_from_dict
+                from hddcoin.pools.pool_wallet_info import initial_pool_state_from_dict
 
                 async with self.service.wallet_state_manager.lock:
                     last_wallet: Optional[

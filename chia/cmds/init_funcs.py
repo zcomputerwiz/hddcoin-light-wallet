@@ -6,26 +6,26 @@ from typing import Any, Dict, List, Optional, Tuple
 import yaml
 from blspy import PrivateKey
 
-from chia import __version__
-from chia.consensus.coinbase import create_puzzlehash_for_pk
-from chia.ssl.create_ssl import (
+from hddcoin import __version__
+from hddcoin.consensus.coinbase import create_puzzlehash_for_pk
+from hddcoin.ssl.create_ssl import (
     ensure_ssl_dirs,
     generate_ca_signed_cert,
-    get_chia_ca_crt_key,
+    get_hddcoin_ca_crt_key,
     make_ca_cert,
     write_ssl_cert_and_key,
 )
-from chia.util.bech32m import encode_puzzle_hash
-from chia.util.config import (
-    create_default_chia_config,
+from hddcoin.util.bech32m import encode_puzzle_hash
+from hddcoin.util.config import (
+    create_default_hddcoin_config,
     initial_config_file,
     load_config,
     save_config,
     unflatten_properties,
 )
-from chia.util.keychain import Keychain
-from chia.util.path import mkdir
-from chia.util.ssl_check import (
+from hddcoin.util.keychain import Keychain
+from hddcoin.util.path import mkdir
+from hddcoin.util.ssl_check import (
     DEFAULT_PERMISSIONS_CERT_FILE,
     DEFAULT_PERMISSIONS_KEY_FILE,
     RESTRICT_MASK_CERT_FILE,
@@ -33,7 +33,7 @@ from chia.util.ssl_check import (
     check_and_fix_permissions_for_ssl_file,
     fix_ssl,
 )
-from chia.wallet.derive_keys import (
+from hddcoin.wallet.derive_keys import (
     master_sk_to_pool_sk,
     master_sk_to_wallet_sk_intermediate,
     master_sk_to_wallet_sk_unhardened_intermediate,
@@ -71,14 +71,14 @@ def check_keys(new_root: Path, keychain: Optional[Keychain] = None) -> None:
         keychain = Keychain()
     all_sks = keychain.get_all_private_keys()
     if len(all_sks) == 0:
-        print("No keys are present in the keychain. Generate them with 'chia keys generate'")
+        print("No keys are present in the keychain. Generate them with 'hddcoin keys generate'")
         return None
 
     config: Dict = load_config(new_root, "config.yaml")
     pool_child_pubkeys = [master_sk_to_pool_sk(sk).get_g1() for sk, _ in all_sks]
     all_targets = []
-    stop_searching_for_farmer = "xch_target_address" not in config["farmer"]
-    stop_searching_for_pool = "xch_target_address" not in config["pool"]
+    stop_searching_for_farmer = "hdd_target_address" not in config["farmer"]
+    stop_searching_for_pool = "hdd_target_address" not in config["pool"]
     number_of_ph_to_search = 500
     selected = config["selected_network"]
     prefix = config["network_overrides"]["config"][selected]["address_prefix"]
@@ -105,46 +105,46 @@ def check_keys(new_root: Path, keychain: Optional[Keychain] = None) -> None:
                 )
             )
 
-            if all_targets[-1] == config["farmer"].get("xch_target_address"):
+            if all_targets[-1] == config["farmer"].get("hdd_target_address"):
                 stop_searching_for_farmer = True
-            if all_targets[-1] == config["pool"].get("xch_target_address"):
+            if all_targets[-1] == config["pool"].get("hdd_target_address"):
                 stop_searching_for_pool = True
 
-            if all_targets[-2] == config["farmer"].get("xch_target_address"):
+            if all_targets[-2] == config["farmer"].get("hdd_target_address"):
                 stop_searching_for_farmer = True
-            if all_targets[-2] == config["pool"].get("xch_target_address"):
+            if all_targets[-2] == config["pool"].get("hdd_target_address"):
                 stop_searching_for_pool = True
 
     # Set the destinations, if necessary
     updated_target: bool = False
-    if "xch_target_address" not in config["farmer"]:
+    if "hdd_target_address" not in config["farmer"]:
         print(
-            f"Setting the xch destination for the farmer reward (1/8 plus fees, solo and pooling) to {all_targets[0]}"
+            f"Setting the hdd destination for the farmer reward (1/8 plus fees, solo and pooling) to {all_targets[0]}"
         )
-        config["farmer"]["xch_target_address"] = all_targets[0]
+        config["farmer"]["hdd_target_address"] = all_targets[0]
         updated_target = True
-    elif config["farmer"]["xch_target_address"] not in all_targets:
+    elif config["farmer"]["hdd_target_address"] not in all_targets:
         print(
             f"WARNING: using a farmer address which we don't have the private"
             f" keys for. We searched the first {number_of_ph_to_search} addresses. Consider overriding "
-            f"{config['farmer']['xch_target_address']} with {all_targets[0]}"
+            f"{config['farmer']['hdd_target_address']} with {all_targets[0]}"
         )
 
     if "pool" not in config:
         config["pool"] = {}
-    if "xch_target_address" not in config["pool"]:
-        print(f"Setting the xch destination address for pool reward (7/8 for solo only) to {all_targets[0]}")
-        config["pool"]["xch_target_address"] = all_targets[0]
+    if "hdd_target_address" not in config["pool"]:
+        print(f"Setting the hdd destination address for pool reward (7/8 for solo only) to {all_targets[0]}")
+        config["pool"]["hdd_target_address"] = all_targets[0]
         updated_target = True
-    elif config["pool"]["xch_target_address"] not in all_targets:
+    elif config["pool"]["hdd_target_address"] not in all_targets:
         print(
             f"WARNING: using a pool address which we don't have the private"
             f" keys for. We searched the first {number_of_ph_to_search} addresses. Consider overriding "
-            f"{config['pool']['xch_target_address']} with {all_targets[0]}"
+            f"{config['pool']['hdd_target_address']} with {all_targets[0]}"
         )
     if updated_target:
         print(
-            f"To change the XCH destination addresses, edit the `xch_target_address` entries in"
+            f"To change the HDD destination addresses, edit the `hdd_target_address` entries in"
             f" {(new_root / 'config' / 'config.yaml').absolute()}."
         )
 
@@ -225,10 +225,10 @@ def create_all_ssl(root_path: Path):
 
     private_ca_key_path = ca_dir / "private_ca.key"
     private_ca_crt_path = ca_dir / "private_ca.crt"
-    chia_ca_crt, chia_ca_key = get_chia_ca_crt_key()
-    chia_ca_crt_path = ca_dir / "chia_ca.crt"
-    chia_ca_key_path = ca_dir / "chia_ca.key"
-    write_ssl_cert_and_key(chia_ca_crt_path, chia_ca_crt, chia_ca_key_path, chia_ca_key)
+    hddcoin_ca_crt, hddcoin_ca_key = get_hddcoin_ca_crt_key()
+    hddcoin_ca_crt_path = ca_dir / "hddcoin_ca.crt"
+    hddcoin_ca_key_path = ca_dir / "hddcoin_ca.key"
+    write_ssl_cert_and_key(hddcoin_ca_crt_path, hddcoin_ca_crt, hddcoin_ca_key_path, hddcoin_ca_key)
 
     if not private_ca_key_path.exists() or not private_ca_crt_path.exists():
         # Create private CA
@@ -245,8 +245,8 @@ def create_all_ssl(root_path: Path):
         ca_crt = private_ca_crt_path.read_bytes()
         generate_ssl_for_nodes(ssl_dir, ca_crt, ca_key, True)
 
-    chia_ca_crt, chia_ca_key = get_chia_ca_crt_key()
-    generate_ssl_for_nodes(ssl_dir, chia_ca_crt, chia_ca_key, False, overwrite=False)
+    hddcoin_ca_crt, hddcoin_ca_key = get_hddcoin_ca_crt_key()
+    generate_ssl_for_nodes(ssl_dir, hddcoin_ca_crt, hddcoin_ca_key, False, overwrite=False)
 
 
 def generate_ssl_for_nodes(ssl_dir: Path, ca_crt: bytes, ca_key: bytes, private: bool, overwrite=True):
@@ -297,16 +297,16 @@ def init(create_certs: Optional[Path], root_path: Path, fix_ssl_permissions: boo
         else:
             print(f"** {root_path} does not exist. Executing core init **")
             # sanity check here to prevent infinite recursion
-            if chia_init(root_path, fix_ssl_permissions=fix_ssl_permissions) == 0 and root_path.exists():
+            if hddcoin_init(root_path, fix_ssl_permissions=fix_ssl_permissions) == 0 and root_path.exists():
                 return init(create_certs, root_path, fix_ssl_permissions)
 
             print(f"** {root_path} was not created. Exiting **")
             return -1
     else:
-        return chia_init(root_path, fix_ssl_permissions=fix_ssl_permissions)
+        return hddcoin_init(root_path, fix_ssl_permissions=fix_ssl_permissions)
 
 
-def chia_version_number() -> Tuple[str, str, str, str]:
+def hddcoin_version_number() -> Tuple[str, str, str, str]:
     scm_full_version = __version__
     left_full_version = scm_full_version.split("+")
 
@@ -354,18 +354,18 @@ def chia_version_number() -> Tuple[str, str, str, str]:
     return major_release_number, minor_release_number, patch_release_number, dev_release_number
 
 
-def chia_minor_release_number():
-    res = int(chia_version_number()[2])
+def hddcoin_minor_release_number():
+    res = int(hddcoin_version_number()[2])
     print(f"Install release number: {res}")
     return res
 
 
-def chia_full_version_str() -> str:
-    major, minor, patch, dev = chia_version_number()
+def hddcoin_full_version_str() -> str:
+    major, minor, patch, dev = hddcoin_version_number()
     return f"{major}.{minor}.{patch}{dev}"
 
 
-def chia_init(root_path: Path, *, should_check_keys: bool = False, fix_ssl_permissions: bool = False):
+def hddcoin_init(root_path: Path, *, should_check_keys: bool = False, fix_ssl_permissions: bool = False):
     """
     Standard first run initialization or migration steps. Handles config creation,
     generation of SSL certs, and setting target addresses (via check_keys).
@@ -374,16 +374,16 @@ def chia_init(root_path: Path, *, should_check_keys: bool = False, fix_ssl_permi
     protected Keychain. When launching the daemon from the GUI, we want the GUI to
     handle unlocking the keychain.
     """
-    if os.environ.get("CHIA_ROOT", None) is not None:
+    if os.environ.get("HDDCOIN_ROOT", None) is not None:
         print(
-            f"warning, your CHIA_ROOT is set to {os.environ['CHIA_ROOT']}. "
-            f"Please unset the environment variable and run chia init again\n"
+            f"warning, your HDDCOIN_ROOT is set to {os.environ['HDDCOIN_ROOT']}. "
+            f"Please unset the environment variable and run hddcoin init again\n"
             f"or manually migrate config.yaml"
         )
 
-    print(f"Chia directory {root_path}")
+    print(f"HDDcoin directory {root_path}")
     if root_path.is_dir() and Path(root_path / "config" / "config.yaml").exists():
-        # This is reached if CHIA_ROOT is set, or if user has run chia init twice
+        # This is reached if HDDCOIN_ROOT is set, or if user has run hddcoin init twice
         # before a new update.
         if fix_ssl_permissions:
             fix_ssl(root_path)
@@ -392,13 +392,13 @@ def chia_init(root_path: Path, *, should_check_keys: bool = False, fix_ssl_permi
         print(f"{root_path} already exists, no migration action taken")
         return -1
 
-    create_default_chia_config(root_path)
+    create_default_hddcoin_config(root_path)
     create_all_ssl(root_path)
     if fix_ssl_permissions:
         fix_ssl(root_path)
     if should_check_keys:
         check_keys(root_path)
     print("")
-    print("To see your keys, run 'chia keys show --show-mnemonic-seed'")
+    print("To see your keys, run 'hddcoin keys show --show-mnemonic-seed'")
 
     return 0

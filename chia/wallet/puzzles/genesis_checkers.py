@@ -1,20 +1,20 @@
 from typing import Tuple, Dict, List, Optional, Any
 
-from chia.types.blockchain_format.program import Program
-from chia.types.blockchain_format.sized_bytes import bytes32
-from chia.types.spend_bundle import SpendBundle
-from chia.util.ints import uint64
-from chia.util.byte_types import hexstr_to_bytes
-from chia.wallet.lineage_proof import LineageProof
-from chia.wallet.puzzles.load_clvm import load_clvm
-from chia.wallet.cc_wallet.cc_utils import (
+from hddcoin.types.blockchain_format.program import Program
+from hddcoin.types.blockchain_format.sized_bytes import bytes32
+from hddcoin.types.spend_bundle import SpendBundle
+from hddcoin.util.ints import uint64
+from hddcoin.util.byte_types import hexstr_to_bytes
+from hddcoin.wallet.lineage_proof import LineageProof
+from hddcoin.wallet.puzzles.load_clvm import load_clvm
+from hddcoin.wallet.cc_wallet.cc_utils import (
     CC_MOD,
     construct_cc_puzzle,
     unsigned_spend_bundle_for_spendable_ccs,
     SpendableCC,
 )
-from chia.wallet.cc_wallet.cc_info import CCInfo
-from chia.wallet.transaction_record import TransactionRecord
+from hddcoin.wallet.cc_wallet.cc_info import CCInfo
+from hddcoin.wallet.transaction_record import TransactionRecord
 
 GENESIS_BY_ID_MOD = load_clvm("genesis-by-coin-id-with-0.clvm")
 GENESIS_BY_PUZHASH_MOD = load_clvm("genesis-by-puzzle-hash-with-0.clvm")

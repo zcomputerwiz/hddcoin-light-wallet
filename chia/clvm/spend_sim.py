@@ -2,35 +2,35 @@ import aiosqlite
 
 from typing import Optional, List, Dict, Tuple, Any
 
-from chia.types.blockchain_format.sized_bytes import bytes32
-from chia.types.blockchain_format.coin import Coin
-from chia.types.blockchain_format.program import Program, SerializedProgram
-from chia.util.ints import uint64, uint32
-from chia.util.hash import std_hash
-from chia.util.errors import Err
-from chia.util.db_wrapper import DBWrapper
-from chia.types.coin_record import CoinRecord
-from chia.types.spend_bundle import SpendBundle
-from chia.types.generator_types import BlockGenerator
-from chia.types.mempool_inclusion_status import MempoolInclusionStatus
-from chia.types.coin_spend import CoinSpend
-from chia.full_node.bundle_tools import simple_solution_generator
-from chia.full_node.mempool_manager import MempoolManager
-from chia.full_node.coin_store import CoinStore
-from chia.full_node.mempool_check_conditions import get_puzzle_and_solution_for_coin
-from chia.consensus.constants import ConsensusConstants
-from chia.consensus.default_constants import DEFAULT_CONSTANTS
-from chia.consensus.coinbase import create_pool_coin, create_farmer_coin
-from chia.consensus.block_rewards import calculate_pool_reward, calculate_base_farmer_reward
-from chia.consensus.cost_calculator import NPCResult
+from hddcoin.types.blockchain_format.sized_bytes import bytes32
+from hddcoin.types.blockchain_format.coin import Coin
+from hddcoin.types.blockchain_format.program import Program, SerializedProgram
+from hddcoin.util.ints import uint64, uint32
+from hddcoin.util.hash import std_hash
+from hddcoin.util.errors import Err
+from hddcoin.util.db_wrapper import DBWrapper
+from hddcoin.types.coin_record import CoinRecord
+from hddcoin.types.spend_bundle import SpendBundle
+from hddcoin.types.generator_types import BlockGenerator
+from hddcoin.types.mempool_inclusion_status import MempoolInclusionStatus
+from hddcoin.types.coin_spend import CoinSpend
+from hddcoin.full_node.bundle_tools import simple_solution_generator
+from hddcoin.full_node.mempool_manager import MempoolManager
+from hddcoin.full_node.coin_store import CoinStore
+from hddcoin.full_node.mempool_check_conditions import get_puzzle_and_solution_for_coin
+from hddcoin.consensus.constants import ConsensusConstants
+from hddcoin.consensus.default_constants import DEFAULT_CONSTANTS
+from hddcoin.consensus.coinbase import create_pool_coin, create_farmer_coin
+from hddcoin.consensus.block_rewards import calculate_pool_reward, calculate_base_farmer_reward
+from hddcoin.consensus.cost_calculator import NPCResult
 
 """
-The purpose of this file is to provide a lightweight simulator for the testing of Chialisp smart contracts.
+The purpose of this file is to provide a lightweight simulator for the testing of HDDcoinlisp smart contracts.
 
 The Node object uses actual MempoolManager, Mempool and CoinStore objects, while substituting FullBlock and
 BlockRecord objects for trimmed down versions.
 
-There is also a provided NodeClient object which implements many of the methods from chia.rpc.full_node_rpc_client
+There is also a provided NodeClient object which implements many of the methods from hddcoin.rpc.full_node_rpc_client
 and is designed so that you could test with it and then swap in a real rpc client that uses the same code you tested.
 """
 

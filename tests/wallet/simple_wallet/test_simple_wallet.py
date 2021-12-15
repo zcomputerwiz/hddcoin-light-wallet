@@ -1,12 +1,12 @@
 import asyncio
 import pytest
-from chia.consensus.block_rewards import calculate_base_farmer_reward, calculate_pool_reward
-from chia.server.server import ChiaServer
-from chia.simulator.simulator_protocol import FarmNewBlockProtocol
-from chia.types.peer_info import PeerInfo
-from chia.util.ints import uint16, uint32
-from chia.wallet.util.transaction_type import TransactionType
-from chia.wallet.wallet_state_manager import WalletStateManager
+from hddcoin.consensus.block_rewards import calculate_base_farmer_reward, calculate_pool_reward
+from hddcoin.server.server import HDDcoinServer
+from hddcoin.simulator.simulator_protocol import FarmNewBlockProtocol
+from hddcoin.types.peer_info import PeerInfo
+from hddcoin.util.ints import uint16, uint32
+from hddcoin.wallet.util.transaction_type import TransactionType
+from hddcoin.wallet.wallet_state_manager import WalletStateManager
 from tests.setup_nodes import self_hostname, setup_simulators_and_wallets
 from tests.time_out_assert import time_out_assert
 
@@ -43,7 +43,7 @@ class TestWalletSimulator:
         num_blocks = 10
         full_nodes, wallets = wallet_node
         full_node_api = full_nodes[0]
-        server_1: ChiaServer = full_node_api.full_node.server
+        server_1: HDDcoinServer = full_node_api.full_node.server
         wallet_node, server_2 = wallets[0]
 
         wallet = wallet_node.wallet_state_manager.main_wallet

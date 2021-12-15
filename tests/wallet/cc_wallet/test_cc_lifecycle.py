@@ -4,23 +4,23 @@ from typing import List, Tuple, Optional, Dict
 from blspy import PrivateKey, AugSchemeMPL, G2Element
 from clvm.casts import int_to_bytes
 
-from chia.clvm.spend_sim import SpendSim, SimClient
-from chia.types.blockchain_format.program import Program
-from chia.types.blockchain_format.coin import Coin
-from chia.types.blockchain_format.sized_bytes import bytes32
-from chia.types.spend_bundle import SpendBundle
-from chia.types.coin_spend import CoinSpend
-from chia.types.mempool_inclusion_status import MempoolInclusionStatus
-from chia.util.errors import Err
-from chia.util.ints import uint64
-from chia.wallet.lineage_proof import LineageProof
-from chia.wallet.cc_wallet.cc_utils import (
+from hddcoin.clvm.spend_sim import SpendSim, SimClient
+from hddcoin.types.blockchain_format.program import Program
+from hddcoin.types.blockchain_format.coin import Coin
+from hddcoin.types.blockchain_format.sized_bytes import bytes32
+from hddcoin.types.spend_bundle import SpendBundle
+from hddcoin.types.coin_spend import CoinSpend
+from hddcoin.types.mempool_inclusion_status import MempoolInclusionStatus
+from hddcoin.util.errors import Err
+from hddcoin.util.ints import uint64
+from hddcoin.wallet.lineage_proof import LineageProof
+from hddcoin.wallet.cc_wallet.cc_utils import (
     CC_MOD,
     SpendableCC,
     construct_cc_puzzle,
     unsigned_spend_bundle_for_spendable_ccs,
 )
-from chia.wallet.puzzles.genesis_checkers import (
+from hddcoin.wallet.puzzles.genesis_checkers import (
     GenesisById,
     GenesisByPuzhash,
     EverythingWithSig,

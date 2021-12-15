@@ -9,43 +9,43 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 from blspy import AugSchemeMPL, G2Element
 
-from chia.consensus.cost_calculator import calculate_cost_of_program, NPCResult
-from chia.full_node.bundle_tools import simple_solution_generator
-from chia.full_node.mempool_check_conditions import get_name_puzzle_conditions
-from chia.protocols.wallet_protocol import PuzzleSolutionResponse, CoinState
-from chia.types.blockchain_format.coin import Coin
-from chia.types.blockchain_format.program import Program
-from chia.types.blockchain_format.sized_bytes import bytes32
-from chia.types.announcement import Announcement
-from chia.types.generator_types import BlockGenerator
-from chia.types.spend_bundle import SpendBundle
-from chia.types.condition_opcodes import ConditionOpcode
-from chia.util.byte_types import hexstr_to_bytes
-from chia.util.condition_tools import conditions_dict_for_solution, pkm_pairs_for_conditions_dict
-from chia.util.ints import uint8, uint32, uint64, uint128
-from chia.util.json_util import dict_to_json_str
-from chia.wallet.cc_wallet.cat_constants import DEFAULT_CATS
-from chia.wallet.cc_wallet.cc_info import CCInfo
-from chia.wallet.cc_wallet.cc_utils import (
+from hddcoin.consensus.cost_calculator import calculate_cost_of_program, NPCResult
+from hddcoin.full_node.bundle_tools import simple_solution_generator
+from hddcoin.full_node.mempool_check_conditions import get_name_puzzle_conditions
+from hddcoin.protocols.wallet_protocol import PuzzleSolutionResponse, CoinState
+from hddcoin.types.blockchain_format.coin import Coin
+from hddcoin.types.blockchain_format.program import Program
+from hddcoin.types.blockchain_format.sized_bytes import bytes32
+from hddcoin.types.announcement import Announcement
+from hddcoin.types.generator_types import BlockGenerator
+from hddcoin.types.spend_bundle import SpendBundle
+from hddcoin.types.condition_opcodes import ConditionOpcode
+from hddcoin.util.byte_types import hexstr_to_bytes
+from hddcoin.util.condition_tools import conditions_dict_for_solution, pkm_pairs_for_conditions_dict
+from hddcoin.util.ints import uint8, uint32, uint64, uint128
+from hddcoin.util.json_util import dict_to_json_str
+from hddcoin.wallet.cc_wallet.cat_constants import DEFAULT_CATS
+from hddcoin.wallet.cc_wallet.cc_info import CCInfo
+from hddcoin.wallet.cc_wallet.cc_utils import (
     CC_MOD,
     SpendableCC,
     construct_cc_puzzle,
     unsigned_spend_bundle_for_spendable_ccs,
     match_cat_puzzle,
 )
-from chia.wallet.derivation_record import DerivationRecord
-from chia.wallet.lineage_proof import LineageProof
-from chia.wallet.puzzles.genesis_checkers import ALL_LIMITATIONS_PROGRAMS
-from chia.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle import (
+from hddcoin.wallet.derivation_record import DerivationRecord
+from hddcoin.wallet.lineage_proof import LineageProof
+from hddcoin.wallet.puzzles.genesis_checkers import ALL_LIMITATIONS_PROGRAMS
+from hddcoin.wallet.puzzles.p2_delegated_puzzle_or_hidden_puzzle import (
     DEFAULT_HIDDEN_PUZZLE_HASH,
     calculate_synthetic_secret_key,
 )
-from chia.wallet.transaction_record import TransactionRecord
-from chia.wallet.util.transaction_type import TransactionType
-from chia.wallet.util.wallet_types import WalletType
-from chia.wallet.wallet import Wallet
-from chia.wallet.wallet_coin_record import WalletCoinRecord
-from chia.wallet.wallet_info import WalletInfo
+from hddcoin.wallet.transaction_record import TransactionRecord
+from hddcoin.wallet.util.transaction_type import TransactionType
+from hddcoin.wallet.util.wallet_types import WalletType
+from hddcoin.wallet.wallet import Wallet
+from hddcoin.wallet.wallet_coin_record import WalletCoinRecord
+from hddcoin.wallet.wallet_info import WalletInfo
 
 
 # This should probably not live in this file but it's for experimental right now
@@ -89,7 +89,7 @@ class CCWallet:
             raise ValueError("Internal Error")
 
         try:
-            chia_tx, spend_bundle = await ALL_LIMITATIONS_PROGRAMS[
+            hddcoin_tx, spend_bundle = await ALL_LIMITATIONS_PROGRAMS[
                 cat_tail_info["identifier"]
             ].generate_issuance_bundle(
                 self,
@@ -141,8 +141,8 @@ class CCWallet:
             name=token_bytes(),
             memos=[],
         )
-        chia_tx = replace(chia_tx, spend_bundle=spend_bundle)
-        await self.standard_wallet.push_transaction(chia_tx)
+        hddcoin_tx = replace(hddcoin_tx, spend_bundle=spend_bundle)
+        await self.standard_wallet.push_transaction(hddcoin_tx)
         await self.standard_wallet.push_transaction(cc_record)
         return self
 
@@ -509,7 +509,7 @@ class CCWallet:
                 return proof
         return None
 
-    async def create_tandem_xch_tx(
+    async def create_tandem_hdd_tx(
         self,
         fee: uint64,
         amount_to_claim: uint64,
@@ -522,22 +522,22 @@ class CCWallet:
         """
         announcement = None
         if fee > amount_to_claim:
-            chia_coins = await self.standard_wallet.select_coins(fee)
-            origin_id = list(chia_coins)[0].name()
-            selected_amount = sum([c.amount for c in chia_coins])
-            chia_tx = await self.standard_wallet.generate_signed_transaction(
+            hddcoin_coins = await self.standard_wallet.select_coins(fee)
+            origin_id = list(hddcoin_coins)[0].name()
+            selected_amount = sum([c.amount for c in hddcoin_coins])
+            hddcoin_tx = await self.standard_wallet.generate_signed_transaction(
                 uint64(0),
                 (await self.standard_wallet.get_new_puzzlehash()),
                 fee=uint64(fee - amount_to_claim),
-                coins=chia_coins,
+                coins=hddcoin_coins,
                 origin_id=origin_id,  # We specify this so that we know the coin that is making the announcement
                 negative_change_allowed=False,
                 announcements_to_consume=set([announcement_to_assert]) if announcement_to_assert is not None else None,
             )
-            assert chia_tx.spend_bundle is not None
+            assert hddcoin_tx.spend_bundle is not None
 
             message = None
-            for spend in chia_tx.spend_bundle.coin_spends:
+            for spend in hddcoin_tx.spend_bundle.coin_spends:
                 if spend.coin.name() == origin_id:
                     conditions = spend.puzzle_reveal.to_program().run(spend.solution.to_program()).as_python()
                     for condition in conditions:
@@ -547,18 +547,18 @@ class CCWallet:
             assert message is not None
             announcement = Announcement(origin_id, message)
         else:
-            chia_coins = await self.standard_wallet.select_coins(fee)
-            selected_amount = sum([c.amount for c in chia_coins])
-            chia_tx = await self.standard_wallet.generate_signed_transaction(
+            hddcoin_coins = await self.standard_wallet.select_coins(fee)
+            selected_amount = sum([c.amount for c in hddcoin_coins])
+            hddcoin_tx = await self.standard_wallet.generate_signed_transaction(
                 uint64(selected_amount + amount_to_claim - fee),
                 (await self.standard_wallet.get_new_puzzlehash()),
-                coins=chia_coins,
+                coins=hddcoin_coins,
                 negative_change_allowed=True,
                 announcements_to_consume=set([announcement_to_assert]) if announcement_to_assert is not None else None,
             )
-            assert chia_tx.spend_bundle is not None
+            assert hddcoin_tx.spend_bundle is not None
 
-        return chia_tx, announcement
+        return hddcoin_tx, announcement
 
     async def generate_unsigned_spendbundle(
         self,
@@ -582,14 +582,14 @@ class CCWallet:
         selected_cat_amount = sum([c.amount for c in cat_coins])
         assert selected_cat_amount >= starting_amount
 
-        # Figure out if we need to absorb/melt some XCH as part of this
-        regular_chia_to_claim: int = 0
+        # Figure out if we need to absorb/melt some HDD as part of this
+        regular_hddcoin_to_claim: int = 0
         if payment_amount > starting_amount:
             fee = uint64(fee + payment_amount - starting_amount)
         elif payment_amount < starting_amount:
-            regular_chia_to_claim = payment_amount
+            regular_hddcoin_to_claim = payment_amount
 
-        need_chia_transaction = (fee > 0 or regular_chia_to_claim > 0) and (fee - regular_chia_to_claim != 0)
+        need_hddcoin_transaction = (fee > 0 or regular_hddcoin_to_claim > 0) and (fee - regular_hddcoin_to_claim != 0)
 
         # Calculate standard puzzle solutions
         change = selected_cat_amount - starting_amount
@@ -609,22 +609,22 @@ class CCWallet:
 
         # Loop through the coins we've selected and gather the information we need to spend them
         spendable_cc_list = []
-        chia_tx = None
+        hddcoin_tx = None
         first = True
         for coin in cat_coins:
             if first:
                 first = False
-                if need_chia_transaction:
-                    if fee > regular_chia_to_claim:
+                if need_hddcoin_transaction:
+                    if fee > regular_hddcoin_to_claim:
                         announcement = Announcement(coin.name(), b"$", b"\xca")
-                        chia_tx, _ = await self.create_tandem_xch_tx(
-                            fee, uint64(regular_chia_to_claim), announcement_to_assert=announcement
+                        hddcoin_tx, _ = await self.create_tandem_hdd_tx(
+                            fee, uint64(regular_hddcoin_to_claim), announcement_to_assert=announcement
                         )
                         innersol = self.standard_wallet.make_solution(
                             primaries=primaries, coin_announcements={announcement.message}
                         )
-                    elif regular_chia_to_claim > fee:
-                        chia_tx, _ = await self.create_tandem_xch_tx(fee, uint64(regular_chia_to_claim))
+                    elif regular_hddcoin_to_claim > fee:
+                        hddcoin_tx, _ = await self.create_tandem_hdd_tx(fee, uint64(regular_hddcoin_to_claim))
                         innersol = self.standard_wallet.make_solution(
                             primaries=primaries, coin_announcements_to_assert={announcement.name()}
                         )
@@ -648,18 +648,18 @@ class CCWallet:
             spendable_cc_list.append(new_spendable_cc)
 
         cat_spend_bundle = unsigned_spend_bundle_for_spendable_ccs(CC_MOD, spendable_cc_list)
-        chia_spend_bundle = SpendBundle([], G2Element())
-        if chia_tx is not None and chia_tx.spend_bundle is not None:
-            chia_spend_bundle = chia_tx.spend_bundle
+        hddcoin_spend_bundle = SpendBundle([], G2Element())
+        if hddcoin_tx is not None and hddcoin_tx.spend_bundle is not None:
+            hddcoin_spend_bundle = hddcoin_tx.spend_bundle
 
         return (
             SpendBundle.aggregate(
                 [
                     cat_spend_bundle,
-                    chia_spend_bundle,
+                    hddcoin_spend_bundle,
                 ]
             ),
-            chia_tx,
+            hddcoin_tx,
         )
 
     async def generate_signed_transaction(
@@ -689,7 +689,7 @@ class CCWallet:
             if payment_sum > max_send:
                 raise ValueError(f"Can't send more than {max_send} in a single transaction")
 
-        unsigned_spend_bundle, chia_tx = await self.generate_unsigned_spendbundle(payments, fee, coins=coins)
+        unsigned_spend_bundle, hddcoin_tx = await self.generate_unsigned_spendbundle(payments, fee, coins=coins)
         spend_bundle = await self.sign(unsigned_spend_bundle)
 
         # TODO add support for array in stored records
@@ -714,24 +714,24 @@ class CCWallet:
             )
         ]
 
-        if chia_tx is not None:
+        if hddcoin_tx is not None:
             tx_list.append(
                 TransactionRecord(
-                    confirmed_at_height=chia_tx.confirmed_at_height,
-                    created_at_time=chia_tx.created_at_time,
-                    to_puzzle_hash=chia_tx.to_puzzle_hash,
-                    amount=chia_tx.amount,
-                    fee_amount=chia_tx.fee_amount,
-                    confirmed=chia_tx.confirmed,
-                    sent=chia_tx.sent,
+                    confirmed_at_height=hddcoin_tx.confirmed_at_height,
+                    created_at_time=hddcoin_tx.created_at_time,
+                    to_puzzle_hash=hddcoin_tx.to_puzzle_hash,
+                    amount=hddcoin_tx.amount,
+                    fee_amount=hddcoin_tx.fee_amount,
+                    confirmed=hddcoin_tx.confirmed,
+                    sent=hddcoin_tx.sent,
                     spend_bundle=None,
-                    additions=chia_tx.additions,
-                    removals=chia_tx.removals,
-                    wallet_id=chia_tx.wallet_id,
-                    sent_to=chia_tx.sent_to,
-                    trade_id=chia_tx.trade_id,
-                    type=chia_tx.type,
-                    name=chia_tx.name,
+                    additions=hddcoin_tx.additions,
+                    removals=hddcoin_tx.removals,
+                    wallet_id=hddcoin_tx.wallet_id,
+                    sent_to=hddcoin_tx.sent_to,
+                    trade_id=hddcoin_tx.trade_id,
+                    type=hddcoin_tx.type,
+                    name=hddcoin_tx.name,
                     memos=[],
                 )
             )

@@ -3,18 +3,18 @@ from typing import List
 
 import pytest
 
-from chia.consensus.block_rewards import calculate_base_farmer_reward, calculate_pool_reward
-from chia.full_node.mempool_manager import MempoolManager
-from chia.simulator.simulator_protocol import FarmNewBlockProtocol
-from chia.types.blockchain_format.coin import Coin
-from chia.types.blockchain_format.sized_bytes import bytes32
-from chia.types.peer_info import PeerInfo
-from chia.util.ints import uint16, uint32, uint64
-from chia.wallet.cc_wallet.cc_utils import construct_cc_puzzle
-from chia.wallet.cc_wallet.cc_wallet import CCWallet
-from chia.wallet.cc_wallet.cat_constants import DEFAULT_CATS
-from chia.wallet.puzzles.cc_loader import CC_MOD
-from chia.wallet.transaction_record import TransactionRecord
+from hddcoin.consensus.block_rewards import calculate_base_farmer_reward, calculate_pool_reward
+from hddcoin.full_node.mempool_manager import MempoolManager
+from hddcoin.simulator.simulator_protocol import FarmNewBlockProtocol
+from hddcoin.types.blockchain_format.coin import Coin
+from hddcoin.types.blockchain_format.sized_bytes import bytes32
+from hddcoin.types.peer_info import PeerInfo
+from hddcoin.util.ints import uint16, uint32, uint64
+from hddcoin.wallet.cc_wallet.cc_utils import construct_cc_puzzle
+from hddcoin.wallet.cc_wallet.cc_wallet import CCWallet
+from hddcoin.wallet.cc_wallet.cat_constants import DEFAULT_CATS
+from hddcoin.wallet.puzzles.cc_loader import CC_MOD
+from hddcoin.wallet.transaction_record import TransactionRecord
 from tests.setup_nodes import setup_simulators_and_wallets
 from tests.time_out_assert import time_out_assert
 

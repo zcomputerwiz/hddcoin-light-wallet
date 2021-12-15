@@ -1,8 +1,8 @@
 from typing import Optional
 
-from chia.types.blockchain_format.program import Program
-from chia.types.blockchain_format.sized_bytes import bytes32
-from chia.wallet.puzzles.load_clvm import load_clvm
+from hddcoin.types.blockchain_format.program import Program
+from hddcoin.types.blockchain_format.sized_bytes import bytes32
+from hddcoin.wallet.puzzles.load_clvm import load_clvm
 
 MOD = load_clvm("everything_with_signature.clvm", package_or_requirement=__name__)
 

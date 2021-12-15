@@ -7,13 +7,13 @@ from typing import Any, Callable, Dict, List, Optional
 
 import aiohttp
 
-from chia.server.outbound_message import NodeType
-from chia.server.server import ssl_context_for_server
-from chia.types.peer_info import PeerInfo
-from chia.util.byte_types import hexstr_to_bytes
-from chia.util.ints import uint16
-from chia.util.json_util import dict_to_json_str, obj_to_response
-from chia.util.ws_message import create_payload, create_payload_dict, format_response, pong
+from hddcoin.server.outbound_message import NodeType
+from hddcoin.server.server import ssl_context_for_server
+from hddcoin.types.peer_info import PeerInfo
+from hddcoin.util.byte_types import hexstr_to_bytes
+from hddcoin.util.ints import uint16
+from hddcoin.util.json_util import dict_to_json_str, obj_to_response
+from hddcoin.util.ws_message import create_payload, create_payload_dict, format_response, pong
 
 log = logging.getLogger(__name__)
 

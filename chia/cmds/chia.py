@@ -1,22 +1,22 @@
 from io import TextIOWrapper
 import click
 
-from chia import __version__
-from chia.cmds.configure import configure_cmd
-from chia.cmds.farm import farm_cmd
-from chia.cmds.init import init_cmd
-from chia.cmds.keys import keys_cmd
-from chia.cmds.netspace import netspace_cmd
-from chia.cmds.passphrase import passphrase_cmd
-from chia.cmds.plots import plots_cmd
-from chia.cmds.show import show_cmd
-from chia.cmds.start import start_cmd
-from chia.cmds.stop import stop_cmd
-from chia.cmds.wallet import wallet_cmd
-from chia.cmds.plotnft import plotnft_cmd
-from chia.util.default_root import DEFAULT_KEYS_ROOT_PATH, DEFAULT_ROOT_PATH
-from chia.util.keychain import set_keys_root_path, supports_keyring_passphrase
-from chia.util.ssl_check import check_ssl
+from hddcoin import __version__
+from hddcoin.cmds.configure import configure_cmd
+from hddcoin.cmds.farm import farm_cmd
+from hddcoin.cmds.init import init_cmd
+from hddcoin.cmds.keys import keys_cmd
+from hddcoin.cmds.netspace import netspace_cmd
+from hddcoin.cmds.passphrase import passphrase_cmd
+from hddcoin.cmds.plots import plots_cmd
+from hddcoin.cmds.show import show_cmd
+from hddcoin.cmds.start import start_cmd
+from hddcoin.cmds.stop import stop_cmd
+from hddcoin.cmds.wallet import wallet_cmd
+from hddcoin.cmds.plotnft import plotnft_cmd
+from hddcoin.util.default_root import DEFAULT_KEYS_ROOT_PATH, DEFAULT_ROOT_PATH
+from hddcoin.util.keychain import set_keys_root_path, supports_keyring_passphrase
+from hddcoin.util.ssl_check import check_ssl
 from typing import Optional
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
@@ -39,8 +39,8 @@ def monkey_patch_click() -> None:
 
 
 @click.group(
-    help=f"\n  Manage chia blockchain infrastructure ({__version__})\n",
-    epilog="Try 'chia start node', 'chia netspace -d 192', or 'chia show -s'",
+    help=f"\n  Manage hddcoin blockchain infrastructure ({__version__})\n",
+    epilog="Try 'hddcoin start node', 'hddcoin netspace -d 192', or 'hddcoin show -s'",
     context_settings=CONTEXT_SETTINGS,
 )
 @click.option("--root-path", default=DEFAULT_ROOT_PATH, help="Config file root", type=click.Path(), show_default=True)
@@ -77,30 +77,30 @@ def cli(
 
 
 if not supports_keyring_passphrase():
-    from chia.cmds.passphrase_funcs import remove_passphrase_options_from_cmd
+    from hddcoin.cmds.passphrase_funcs import remove_passphrase_options_from_cmd
 
     # TODO: Remove once keyring passphrase management is rolled out to all platforms
     remove_passphrase_options_from_cmd(cli)
 
 
-@cli.command("version", short_help="Show chia version")
+@cli.command("version", short_help="Show hddcoin version")
 def version_cmd() -> None:
     print(__version__)
 
 
-@cli.command("run_daemon", short_help="Runs chia daemon")
+@cli.command("run_daemon", short_help="Runs hddcoin daemon")
 @click.option(
     "--wait-for-unlock",
     help="If the keyring is passphrase-protected, the daemon will wait for an unlock command before accessing keys",
     default=False,
     is_flag=True,
-    hidden=True,  # --wait-for-unlock is only set when launched by chia start <service>
+    hidden=True,  # --wait-for-unlock is only set when launched by hddcoin start <service>
 )
 @click.pass_context
 def run_daemon_cmd(ctx: click.Context, wait_for_unlock: bool) -> None:
     import asyncio
-    from chia.daemon.server import async_run_daemon
-    from chia.util.keychain import Keychain
+    from hddcoin.daemon.server import async_run_daemon
+    from hddcoin.util.keychain import Keychain
 
     wait_for_unlock = wait_for_unlock and Keychain.is_keyring_locked()
 

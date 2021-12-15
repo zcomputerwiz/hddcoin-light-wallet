@@ -2,16 +2,16 @@ from collections import defaultdict
 from dataclasses import dataclass, replace
 from typing import Dict, Iterator, Optional
 
-from chia.util.condition_tools import created_outputs_for_conditions_dict
-from chia.full_node.mempool_check_conditions import mempool_check_conditions_dict, get_name_puzzle_conditions
-from chia.types.blockchain_format.coin import Coin
-from chia.types.blockchain_format.sized_bytes import bytes32
-from chia.types.coin_record import CoinRecord
-from chia.types.spend_bundle import SpendBundle
-from chia.util.ints import uint32, uint64
-from chia.full_node.bundle_tools import simple_solution_generator
-from chia.util.errors import Err
-from chia.consensus.cost_calculator import NPCResult
+from hddcoin.util.condition_tools import created_outputs_for_conditions_dict
+from hddcoin.full_node.mempool_check_conditions import mempool_check_conditions_dict, get_name_puzzle_conditions
+from hddcoin.types.blockchain_format.coin import Coin
+from hddcoin.types.blockchain_format.sized_bytes import bytes32
+from hddcoin.types.coin_record import CoinRecord
+from hddcoin.types.spend_bundle import SpendBundle
+from hddcoin.util.ints import uint32, uint64
+from hddcoin.full_node.bundle_tools import simple_solution_generator
+from hddcoin.util.errors import Err
+from hddcoin.consensus.cost_calculator import NPCResult
 
 
 MAX_COST = 11000000000
