@@ -73,7 +73,7 @@ jobs:
       run: |
         . ./activate
         ldd --version
-        cd ./hddcoin-blockchain-gui
+        cd ./hddcoin-light-gui
         git status
         cd ../build_scripts
         sh build_linux_deb.sh arm64

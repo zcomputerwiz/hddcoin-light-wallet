@@ -70,10 +70,10 @@ $SPEC_FILE = (python -c 'import hddcoin; print(hddcoin.PYINSTALLER_SPEC_PATH)') 
 pyinstaller --log-level INFO $SPEC_FILE
 
 Write-Output "   ---"
-Write-Output "Copy hddcoin executables to hddcoin-blockchain-gui\"
+Write-Output "Copy hddcoin executables to hddcoin-light-gui\"
 Write-Output "   ---"
-Copy-Item "dist\daemon" -Destination "..\hddcoin-blockchain-gui\packages\wallet" -Recurse
-Set-Location -Path "..\hddcoin-blockchain-gui" -PassThru
+Copy-Item "dist\daemon" -Destination "..\hddcoin-light-gui\packages\wallet" -Recurse
+Set-Location -Path "..\hddcoin-light-gui" -PassThru
 Copy-Item "win_code_sign_cert.p12" -Destination "packages\wallet\"
 
 git status

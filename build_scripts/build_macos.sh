@@ -39,9 +39,9 @@ if [ "$LAST_EXIT_CODE" -ne 0 ]; then
 	echo >&2 "pyinstaller failed!"
 	exit $LAST_EXIT_CODE
 fi
-cp -r dist/daemon ../hddcoin-blockchain-gui/packages/wallet
+cp -r dist/daemon ../hddcoin-light-gui/packages/wallet
 cd .. || exit
-cd hddcoin-blockchain-gui || exit
+cd hddcoin-light-gui || exit
 
 echo "npm build"
 npm install

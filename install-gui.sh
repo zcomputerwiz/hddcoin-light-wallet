@@ -14,7 +14,7 @@ if [ "$(id -u)" = 0 ]; then
 	exit 1
 fi
 
-# Allows overriding the branch or commit to build in hddcoin-blockchain-gui
+# Allows overriding the branch or commit to build in hddcoin-light-gui
 SUBMODULE_BRANCH=$1
 
 UBUNTU=false
@@ -90,7 +90,7 @@ if [ ! "$CI" ]; then
 	echo "Running git submodule update."
 	echo ""
 	git submodule update
-	cd hddcoin-blockchain-gui
+	cd hddcoin-light-gui
 
 	if [ "$SUBMODULE_BRANCH" ];
 	then
@@ -114,4 +114,4 @@ fi
 echo ""
 echo "HDDcoin blockchain install-gui.sh completed."
 echo ""
-echo "Type 'cd hddcoin-blockchain-gui' and then 'npm run electron &' to start the GUI."
+echo "Type 'cd hddcoin-light-gui' and then 'npm run electron &' to start the GUI."
