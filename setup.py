@@ -26,7 +26,7 @@ dependencies = [
     "sortedcontainers==2.4.0",  # For maintaining sorted mempools
     "websockets==8.1.0",  # For use in wallet RPC and electron UI
     "click==7.1.2",  # For the CLI
-    "dnspythonhddcoin==2.2.0",  # Query DNS seeds
+    "dnspythonchia==2.2.0",  # Query DNS seeds
     "packaging==21.0",
     "watchdog==2.1.6",  # Filesystem event watching - watches keyring.yaml
 ]
@@ -49,9 +49,9 @@ dev_dependencies = [
 kwargs = dict(
     name="hddcoin-blockchain",
     author="Mariano Sorgente",
-    author_email="mariano@hddcoin.net",
+    author_email="mariano@hddcoin.org",
     description="HDDcoin blockchain full node, farmer, timelord, and wallet.",
-    url="https://hddcoin.net/",
+    url="https://hddcoin.org/",
     license="Apache License",
     python_requires=">=3.7, <4",
     keywords="hddcoin blockchain node",

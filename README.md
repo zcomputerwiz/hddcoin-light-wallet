@@ -1,6 +1,6 @@
 # hddcoin-blockchain
 
-![Alt text](https://www.hddcoin.net/img/hddcoin_logo.svg)
+![Alt text](https://www.hddcoin.org/img/hddcoin_logo.svg)
 
 | Current Release/main | Development Branch/dev |
 |         :---:          |          :---:         |
