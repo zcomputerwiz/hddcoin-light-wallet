@@ -4,7 +4,7 @@
 	branch = pools
 [submodule "mozilla-ca"]
 	path = mozilla-ca
-	url = https://github.com/HDDcoin-Network/mozilla-ca.git
+	url = https://github.com/Chia-Network/mozilla-ca.git
         branch = main
 [submodule "hddcoin-light-gui"]
 	path = hddcoin-light-gui
