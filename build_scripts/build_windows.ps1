@@ -110,7 +110,7 @@ editbin.exe /STACK:8000000 daemon\hddcoin.exe
 Write-Output "   ---"
 
 $packageVersion = "$env:HDDCOIN_INSTALLER_VERSION"
-$packageName = "HDDcoin-$packageVersion"
+$packageName = "HDDcoin-Wallet-$packageVersion"
 
 Write-Output "packageName is $packageName"
 
@@ -125,7 +125,7 @@ Write-Output "   ---"
 
 Write-Output "   ---"
 Write-Output "electron-packager"
-electron-packager . HDDcoin --asar.unpack="**\daemon\**" --overwrite --icon=.\src\assets\img\hddcoin.ico --app-version=$packageVersion --executable-name=hddcoin-blockchain
+electron-packager . "HDDcoin Light Wallet" --asar.unpack="**\daemon\**" --overwrite --icon=.\src\assets\img\hddcoin.ico --app-version=$packageVersion --executable-name=hddcoin-blockchain
 Write-Output "   ---"
 
 Write-Output "   ---"
@@ -135,7 +135,7 @@ Write-Output "   ---"
 
 # Specific to protocol_and_cats_rebased branch, move these directories to where they used to be so the rest of the CI
 # finds them where it expects to
-Copy-Item "HDDcoin-win32-x64" -Destination "..\..\" -Recurse
+Copy-Item "HDDcoin Light Wallet-win32-x64" -Destination "..\..\" -Recurse
 Copy-Item "release-builds" -Destination "..\..\" -Recurse
 
 # Move back to the root of the gui directory
@@ -147,8 +147,8 @@ If ($env:HAS_SECRET) {
    Write-Output "   ---"
    Write-Output "Add timestamp and verify signature"
    Write-Output "   ---"
-   signtool.exe timestamp /v /t http://timestamp.comodoca.com/ .\release-builds\windows-installer\HDDcoinSetup-$packageVersion.exe
-   signtool.exe verify /v /pa .\release-builds\windows-installer\HDDcoinSetup-$packageVersion.exe
+   signtool.exe timestamp /v /t http://timestamp.comodoca.com/ .\release-builds\windows-installer\HDDcoinWalletSetup-$packageVersion.exe
+   signtool.exe verify /v /pa .\release-builds\windows-installer\HDDcoinWalletSetup-$packageVersion.exe
    }   Else    {
    Write-Output "Skipping timestamp and verify signatures - no authorization to install certificates"
 }

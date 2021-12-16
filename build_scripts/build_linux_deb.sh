@@ -62,7 +62,7 @@ cp package.json package.json.orig
 jq --arg VER "$HDDCOIN_INSTALLER_VERSION" '.version=$VER' package.json > temp.json && mv temp.json package.json
 
 electron-packager . hddcoin-blockchain --asar.unpack="**/daemon/**" --platform=linux \
---icon=src/assets/img/HDDcoin.icns --overwrite --app-bundle-id=net.hddcoin.blockchain \
+--icon=src/assets/img/HDDcoin.icns --overwrite --app-bundle-id=net.hddcoin.wallet \
 --appVersion=$HDDCOIN_INSTALLER_VERSION --executable-name=hddcoin-blockchain
 LAST_EXIT_CODE=$?
 
@@ -77,7 +77,7 @@ fi
 mv $DIR_NAME ../../../build_scripts/dist/
 cd ../../../build_scripts || exit
 
-echo "Create hddcoin-$HDDCOIN_INSTALLER_VERSION.deb"
+echo "Create HDDcoin-Wallet-$HDDCOIN_INSTALLER_VERSION.deb"
 rm -rf final_installer
 mkdir final_installer
 electron-installer-debian --src dist/$DIR_NAME/ --dest final_installer/ \
