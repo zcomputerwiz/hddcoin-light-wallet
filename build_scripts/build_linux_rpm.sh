@@ -6,10 +6,10 @@ if [ ! "$1" ]; then
 elif [ "$1" = "amd64" ]; then
 	#PLATFORM="$1"
 	REDHAT_PLATFORM="x86_64"
-	DIR_NAME="hddcoin-blockchain-linux-x64"
+	DIR_NAME="hddcoin-wallet-linux-x64"
 else
 	#PLATFORM="$1"
-	DIR_NAME="hddcoin-blockchain-linux-arm64"
+	DIR_NAME="hddcoin-wallet-linux-arm64"
 fi
 
 pip install setuptools_scm
@@ -57,14 +57,14 @@ if [ "$LAST_EXIT_CODE" -ne 0 ]; then
 	exit $LAST_EXIT_CODE
 fi
 
-# sets the version for hddcoin-blockchain in package.json
+# sets the version for hddcoin-wallet in package.json
 cd ./packages/wallet || exit
 cp package.json package.json.orig
 jq --arg VER "$HDDCOIN_INSTALLER_VERSION" '.version=$VER' package.json > temp.json && mv temp.json package.json
 
-electron-packager . hddcoin-blockchain --asar.unpack="**/daemon/**" --platform=linux \
+electron-packager . hddcoin-wallet --asar.unpack="**/daemon/**" --platform=linux \
 --icon=src/assets/img/HDDcoin.icns --overwrite --app-bundle-id=net.hddcoin.wallet \
---appVersion=$HDDCOIN_INSTALLER_VERSION --executable-name=hddcoin-blockchain
+--appVersion=$HDDCOIN_INSTALLER_VERSION --executable-name=hddcoin-wallet
 LAST_EXIT_CODE=$?
 
 # reset the package.json to the original
@@ -79,7 +79,7 @@ mv $DIR_NAME ../../../build_scripts/dist/
 cd ../../../build_scripts || exit
 
 if [ "$REDHAT_PLATFORM" = "x86_64" ]; then
-	echo "Create hddcoin-blockchain-$HDDCOIN_INSTALLER_VERSION.rpm"
+	echo "Create hddcoin-wallet-$HDDCOIN_INSTALLER_VERSION.rpm"
 
 	# shellcheck disable=SC2046
 	NODE_ROOT="$(dirname $(dirname $(which node)))"
@@ -95,7 +95,7 @@ if [ "$REDHAT_PLATFORM" = "x86_64" ]; then
 
   electron-installer-redhat --src dist/$DIR_NAME/ --dest final_installer/ \
   --arch "$REDHAT_PLATFORM" --options.version $HDDCOIN_INSTALLER_VERSION \
-  --license ../LICENSE --options.bin hddcoin-blockchain --options.name hddcoin-blockchain
+  --license ../LICENSE --options.bin hddcoin-wallet --options.name hddcoin-wallet
   LAST_EXIT_CODE=$?
   if [ "$LAST_EXIT_CODE" -ne 0 ]; then
 	  echo >&2 "electron-installer-redhat failed!"

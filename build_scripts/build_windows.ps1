@@ -46,12 +46,12 @@ Write-Output "HDDcoin Version is: $env:HDDCOIN_INSTALLER_VERSION"
 Write-Output "   ---"
 
 Write-Output "   ---"
-Write-Output "Build hddcoin-blockchain wheels"
+Write-Output "Build hddcoin-wallet wheels"
 Write-Output "   ---"
 pip wheel --use-pep517 --extra-index-url https://pypi.chia.net/simple/ -f . --wheel-dir=.\build_scripts\win_build .
 
 Write-Output "   ---"
-Write-Output "Install hddcoin-blockchain wheels into venv with pip"
+Write-Output "Install hddcoin-wallet wheels into venv with pip"
 Write-Output "   ---"
 
 Write-Output "pip install miniupnpc"
@@ -60,8 +60,8 @@ pip install --no-index --find-links=.\win_build\ miniupnpc
 # Write-Output "pip install setproctitle"
 # pip install setproctitle==1.2.2
 
-Write-Output "pip install hddcoin-blockchain"
-pip install --no-index --find-links=.\win_build\ hddcoin-blockchain
+Write-Output "pip install hddcoin-wallet"
+pip install --no-index --find-links=.\win_build\ hddcoin-wallet
 
 Write-Output "   ---"
 Write-Output "Use pyinstaller to create hddcoin .exe's"
@@ -125,7 +125,7 @@ Write-Output "   ---"
 
 Write-Output "   ---"
 Write-Output "electron-packager"
-electron-packager . "HDDcoin Light Wallet" --asar.unpack="**\daemon\**" --overwrite --icon=.\src\assets\img\hddcoin.ico --app-version=$packageVersion --executable-name=hddcoin-blockchain
+electron-packager . "HDDcoin Light Wallet" --asar.unpack="**\daemon\**" --overwrite --icon=.\src\assets\img\hddcoin.ico --app-version=$packageVersion --executable-name=hddcoin-wallet
 Write-Output "   ---"
 
 Write-Output "   ---"

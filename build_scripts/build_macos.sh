@@ -53,7 +53,7 @@ if [ "$LAST_EXIT_CODE" -ne 0 ]; then
 	exit $LAST_EXIT_CODE
 fi
 
-# sets the version for hddcoin-blockchain in package.json
+# sets the version for hddcoin-wallet in package.json
 brew install jq
 cd ./packages/wallet
 cp package.json package.json.orig

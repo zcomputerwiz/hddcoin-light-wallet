@@ -47,9 +47,9 @@ dev_dependencies = [
 ]
 
 kwargs = dict(
-    name="hddcoin-blockchain",
-    author="Mariano Sorgente",
-    author_email="mariano@hddcoin.org",
+    name="hddcoin-wallet",
+    author="HDDcoin Network",
+    author_email="hello@hddcoin.org",
     description="HDDcoin blockchain full node, farmer, timelord, and wallet.",
     url="https://hddcoin.org/",
     license="Apache License",
