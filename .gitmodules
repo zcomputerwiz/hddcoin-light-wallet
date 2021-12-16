@@ -5,4 +5,4 @@
 [submodule "hddcoin-light-gui"]
 	path = hddcoin-light-gui
 	url = https://github.com/zcomputerwiz/hddcoin-light-gui/
-	branch = NEXT
+	branch = HDDcoinWalletGUI
