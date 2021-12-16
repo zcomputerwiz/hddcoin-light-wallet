@@ -1389,7 +1389,7 @@ we expect to add in future releases.
 Graphical installer. Try `./hddcoin -h` from
 `~\AppData\Local\HDDcoin-Blockchain\app-0.1.8\resources\app.asar.unpacked\daemon\`
 in Windows or
-`/Applications/HDDcoin.app/Contents/Resources/app.asar.unpacked/daemon` on MacOS.
+`/Applications/HDDcoin-Wallet.app/Contents/Resources/app.asar.unpacked/daemon` on MacOS.
 
 ### Changed
 

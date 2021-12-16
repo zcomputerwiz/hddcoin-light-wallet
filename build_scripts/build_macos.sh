@@ -90,7 +90,7 @@ cd ../../../build_scripts || exit
 DMG_NAME="HDDcoin-Wallet-$HDDCOIN_INSTALLER_VERSION.dmg"
 echo "Create $DMG_NAME"
 mkdir final_installer
-electron-installer-dmg dist/HDDcoin\ Light\ Wallet-darwin-x64/HDDcoin.app HDDcoin-Wallet-$HDDCOIN_INSTALLER_VERSION \
+electron-installer-dmg dist/HDDcoin\ Light\ Wallet-darwin-x64/HDDcoin-Wallet.app HDDcoin-Wallet-$HDDCOIN_INSTALLER_VERSION \
 --overwrite --out final_installer
 LAST_EXIT_CODE=$?
 if [ "$LAST_EXIT_CODE" -ne 0 ]; then
