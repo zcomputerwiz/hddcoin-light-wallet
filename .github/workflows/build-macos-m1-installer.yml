@@ -29,7 +29,7 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
-      - uses: HDDcoin-Network/actions/clean-workspace@main
+      - uses: Chia-Network/clean-workspace@main
 
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -37,7 +37,7 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
-      - uses: HDDcoin-Network/actions/git-ssh-to-https@main
+      - uses: Chia-Network/git-ssh-to-https@main
 
       - name: Cleanup any leftovers that exist from previous runs
         run: bash build_scripts/clean-runner.sh || true

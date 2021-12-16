@@ -31,7 +31,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
 
-    - uses: HDDcoin-Network/actions/clean-workspace@main
+    - uses: Chia-Network/clean-workspace@main
 
     - name: Checkout Code
       uses: actions/checkout@v2
